@@ -1,0 +1,42 @@
+# Profile для Kolya's pet-проектов
+# Hub читает этот файл при MCP-handshake с header `X-Profile-Id: developer-tools`.
+# Включает только те tools, что нужны для разработки личных проектов.
+# Документация: docs/profiles/schema.md
+
+name: developer-tools
+description: "Personal dev projects — repomix, fetch, file/code ops."
+
+include:
+  # Codebase analysis
+  - server: repomix
+    tools: [pack_codebase, pack_remote_repository, read_repomix_output]
+  
+  # Local + remote file fetching
+  - server: fetch
+    tools: [fetch_html, fetch_markdown, fetch_readable]
+  
+  # Documentation lookup
+  - server: context7
+    tools: [resolve_library_id, query_docs]
+  
+  # Repository analysis (DeepWiki is read-only)
+  - server: deepwiki
+    tools: [read_wiki_structure, ask_wiki_question]
+
+exclude:
+  # Подстраховка: ничего удаляющего / перманентного
+  - pattern: "*delete*"
+  - pattern: "*admin_*"
+  - pattern: "*revoke*"
+
+limits:
+  max_calls_per_session: 800
+  max_calls_per_tool: 150
+  max_session_duration_seconds: 3600
+
+policy:
+  audit_level: full
+  # response truncation (Phase 3):
+  max_response_tokens: 6000
+  # tag redaction (Phase 3, не используется в MVP):
+  redact_tags: []

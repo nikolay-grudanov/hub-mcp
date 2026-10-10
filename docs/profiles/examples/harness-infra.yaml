@@ -1,0 +1,57 @@
+# Profile для основного harness workspace (Kolya's primary agent profile)
+# Соответствует текущему набору MCP в ~/.hermes/profiles/harness/config.yaml.
+# Документация: docs/profiles/schema.md
+
+name: harness-infra
+description: "Primary harness workspace — full infrastructure, research, knowledge."
+
+include:
+  # Memory / KB
+  - server: hindsight
+  
+  # Local wiki search (BM25 + vector + rerank over llmwiki)
+  - server: qmd
+  
+  # Codebase analysis
+  - server: repomix
+  
+  # Web fetching (multiple variants)
+  - server: fetch
+  - server: jina-rester
+  
+  # Search alternatives
+  - server: arxiv-mcp-server
+  - server: searxng
+  - server: duckduckgo-mcp-server
+  
+  # Documentation / code-arch reference
+  - server: context7
+  - server: deepwiki
+  
+  # Memory-less / kanban / tasks
+  - server: kanban
+  
+  # LLM routing / fallback
+  - server: omniroute
+  
+  # Z.AI copilot (vision)
+  - server: zai-mcp-server
+
+exclude:
+  # Sub-agent management и meta-tools — только для dedicated профилей
+  - server: hindsight
+    tool: clear_memories
+  - pattern: "*admin_*"
+
+limits:
+  max_calls_per_session: 1500
+  max_calls_per_tool: 300
+  max_session_duration_seconds: 7200
+
+policy:
+  audit_level: full
+  max_response_tokens: 8000
+  redact_tags:
+    # Personal / sensitive — никогда не утекают через audit log
+    - "private-*"
+    - "salary-*"
