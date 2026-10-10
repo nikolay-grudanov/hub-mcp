@@ -1,5 +1,9 @@
 # Implementation Plan: 002 — Skeleton core hub-mcp server
 
+> **STATUS 2026-10-10**: Implemented. End-to-end готов. 42 tests passing + 1 skipped (OQ-hub-013). Pushed на origin/master (коммиты `e1b7f5f`, `b3d2355`). Live verified с 4 real upstream (hindsight, qmd, deepwiki, context7).
+
+> **Architectural pivot**: Task 3.1 (UpstreamClient) реализован через `mcp.client.streamable_http.streamable_http_client` + `ClientSession` (ADR-007), не через handwritten JSON-RPC over httpx как в оригинальном плане. Live debug выявил 4 spec-compliance bugs (Accept header missing, session_id not propagated, MCP-Protocol-Version missing, SSE response not handled) — SDK их решает из коробки.
+
 > **For agents**: Use `subagent-driven-development` skill to implement this plan task-by-task. Each task = 2-5 minutes focused work. TDD: test → fail → impl → pass → commit (after Kolya's explicit «коммить»).
 
 **Goal**: запустить рабочий harness-mcp-hub с HTTP MCP-transport + единым конфиг-файлом + upstream HTTP-прокси + Hindsight audit log. **Без** per-profile filtering, **без** admin UI.

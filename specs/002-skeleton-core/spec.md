@@ -1,8 +1,9 @@
 # Feature Specification: 002 — Skeleton core hub-mcp server
 
-**Feature Branch**: `feat/002-skeleton-core`
+**Feature Branch**: `feat/002-skeleton-core` (merged to master)
 **Created**: 2026-10-10
-**Status**: Draft
+**Completed**: 2026-10-10
+**Status**: Implemented
 **Input**: «Согласен, не меняем стек. Давай тогда напиши спеку для создания скелета и первого mvp пока без ui, будем через конфиг или как-то по другому добавлять доступные mcp инструменты в hub. Профили тоже уберем из списка работ. Нам надо создать хорошее ядро» (Kolya 2026-10-10).
 
 **Supersedes**: [`specs/001-mvp-hub-server/`](../001-mvp-hub-server/spec.md) — старая спека с per-profile filtering + admin UI, отменена ADR-006.
@@ -11,6 +12,7 @@
 - [ADR-003](../docs/decisions/ADR-003-starlette-not-flask.md) — Starlette + uvicorn, не Flask, не FastAPI.
 - [ADR-004](../docs/decisions/ADR-004-no-server-side-state.md) — без server-side state между запросами.
 - [ADR-006](../docs/decisions/ADR-006-skeleton-core-no-profiles-no-ui.md) — **MVP = skeleton + core, без профилей и admin**.
+- [ADR-007](../docs/decisions/ADR-007-upstream-via-mcp-sdk.md) — **UpstreamClient через `mcp.client.streamable_http` (применён в Phase 1)**.
 
 ## Context and Motivation
 
