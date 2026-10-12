@@ -76,26 +76,36 @@ updated: 2026-10-10
 
 ## Phase 2 — Production polish
 
-**Статус**: ⚪ not started
+**Статус**: 🟡 in progress (spec ready 2026-10-10)
 
-**Цель**: устранить оставшиеся rough edges после MVP живёт неделю в production без ручного перезапуска.
+**Цель**: stdio upstream + hot-reload + fix tooling. Hub покрывает реальный стек Kolya (включая 5+ stdio MCP), и может обновлять конфиг без рестарта.
 
-**Scope**:
+**Spec**: `specs/003-stdio-and-hot-reload/` (Status: Draft, 6 phase'ов, 15 tasks, 3-4 часа).
 
-- stdio upstream (через `asyncio.create_subprocess_exec` + lifecycle). — Колya: "минимум 5 из 25+ MCP — stdio"
-- Hot-reload конфига через SIGHUP (file watcher + graceful reload).
-- Per-upstream health checker с background ping loop (rolling window).
-- Structured logging через `structlog` (JSON output).
-- Graceful shutdown (SIGTERM → drain in-flight calls → close upstream).
-- WebSocket MCP transport (см. OQ-hub-008).
-- Audit retention policy (см. OQ-hub-011).
-- Circuit breaker на upstream (3 failed calls → 60s cooldown → retry).
-- Fix pre-commit hook (OQ-hub-014).
-- Submit upstream SDK bug для cancel scope (OQ-hub-013).
+**Scope (минимизированный, "вариант a" по Kolya 2026-10-10)**:
 
-**Done when**: hub работает 24/7 в течение недели без ручного перезапуска.
+- [ ] **stdio upstream** (ADR-008) — `UpstreamConfig.transport` discriminated union по `kind` (HttpTransport | StdioTransport). `UpstreamClient` расширяется stdio branch через `mcp.client.stdio.stdio_client`. Backward-compat для Phase 1 `url: str` через `_backward_compat_url` model_validator.
+- [ ] **SIGHUP hot-reload** — signal handler в `_lifespan`, перечитывает config, diff upstream_map, add/remove/restart. Invalid YAML → keep old config.
+- [ ] **Fix pre-commit hook (OQ-hub-014)** — refactor с `run_step` pattern, убрать `set -e`, добавить diagnostic output. Verification: `git commit` работает без `--no-verify`.
+- [ ] **Submit SDK bug (OQ-hub-013)** — минимальный repro для cancel-scope issue + issue в modelcontextprotocol/python-sdk.
 
-**Estimated**: 1-2 дня.
+**Done when**:
+- 50+ tests passing (8-9 новых), 1 skipped (OQ-hub-013)
+- `git commit` работает без `--no-verify`
+- Live verified: arxiv stdio + fetch stdio + HTTP upstream'ы одновременно
+- SIGHUP reload работает без рестарта процесса
+- SDK bug submitted upstream
+
+**Estimated**: 3-4 часа (не «1-2 дня» — discriminated union + SDK stdio_client дают минимальный code change).
+
+**НЕ входит в Phase 2** (явно отложено в Phase 3+):
+
+- WebSocket MCP transport (OQ-hub-008) — нет upstream требующего WS.
+- Audit retention policy (OQ-hub-011) — Hindsight storage cheap, нет pressure.
+- Per-upstream health checker с ping loop — Phase 3+.
+- Circuit breaker — Phase 3+.
+- Structured logging через structlog — Phase 3+.
+- Subprocess auto-restart на crash — Phase 3+.
 
 ---
 

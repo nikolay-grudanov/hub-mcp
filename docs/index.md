@@ -26,22 +26,28 @@ hub-mcp/
 │   │   ├── ADR-004-no-server-side-state.md
 │   │   ├── ADR-005-admin-rest-api-and-web-ui-in-mvp.md (Superseded)
 │   │   ├── ADR-006-skeleton-core-no-profiles-no-ui.md  (MVP scope)
-│   │   └── ADR-007-upstream-via-mcp-sdk.md              (применён в Phase 1)
+│   │   ├── ADR-007-upstream-via-mcp-sdk.md              (применён в Phase 1)
+│   │   └── ADR-008-transport-discriminated-union.md     (Phase 2, in progress)
 │   ├── profiles/           # схемы и примеры per-profile policy (archived)
 │   ├── backlog/            # отложенные задачи
 │   ├── interviews/         # интервью с пользователями / записи решений
 │   └── prototypes/         # прототипы, PoC, эксперименты
-├── specs/
-│   ├── 001-mvp-hub-server/ # Superseded (старая спека с profiles+admin)
-│   │   ├── spec.md
-│   │   ├── plan.md
-│   │   ├── data-model.md
-│   │   └── tasks.md
-│   └── 002-skeleton-core/  # Завершён 2026-10-10
-│       ├── spec.md         # что строили
-│       ├── plan.md         # bite-sized tasks + TDD
-│       ├── data-model.md   # схемы (Pydantic)
-│       └── tasks.md        # чек-лист (все [x])
+└── specs/
+    ├── 001-mvp-hub-server/ # Superseded (старая спека с profiles+admin)
+    │   ├── spec.md
+    │   ├── plan.md
+    │   ├── data-model.md
+    │   └── tasks.md
+    ├── 002-skeleton-core/  # Завершён 2026-10-10
+    │   ├── spec.md         # что строили
+    │   ├── plan.md         # bite-sized tasks + TDD
+    │   ├── data-model.md   # схемы (Pydantic)
+    │   └── tasks.md        # чек-лист (все [x])
+    └── 003-stdio-and-hot-reload/  # Phase 2, in progress 2026-10-10
+        ├── spec.md         # stdio + SIGHUP + fix tooling
+        ├── plan.md         # 6 phase'ов, 15 tasks
+        ├── data-model.md   # discriminated union TransportConfig
+        └── tasks.md        # чек-лист (draft)
 ├── src/
 │   └── hub_mcp/
 │       ├── __init__.py
@@ -70,6 +76,7 @@ hub-mcp/
 | Какой формат у profile YAML | `docs/profiles/schema.md` (archived) |
 | Готовые примеры профилей | `docs/profiles/examples/` (archived) |
 | Детальный план реализации MVP | `specs/002-skeleton-core/plan.md` |
+| Детальный план Phase 2 (stdio + hot-reload) | `specs/003-stdio-and-hot-reload/plan.md` |
 | Контракт для агентов, которые будут реализовывать | `AGENT_CONTEXT.md` |
 | Локальные правила (терминология, формат) | `docs/_conventions.md` |
 | Конфиг Kolya's setup | `~/.harness-hub/config.yaml` |
@@ -87,3 +94,4 @@ hub-mcp/
 
 - 2026-10-10 — initial scaffold (Kolya + Hermes-harness)
 - 2026-10-10 — Phase 1 завершён: добавлены ADR-005/006/007, src/, tests/, docs/_conventions.md, обновлены ссылки на Phase 1 done
+- 2026-10-10 — Phase 2 spec ready: добавлены `specs/003-stdio-and-hot-reload/`, ADR-008, roadmap.md Phase 2 → in progress

@@ -36,6 +36,8 @@ updated: 2026-10-10
 
 **Когда решать**: при начале Phase 2, после MVP прошёл live-debug.
 
+  - **RESOLVED 2026-10-10** → [ADR-008](decisions/ADR-008-transport-discriminated-union.md) + спека [003-stdio-and-hot-reload](../specs/003-stdio-and-hot-reload/spec.md). Вариант (a) — UpstreamClient расширяется stdio branch через `mcp.client.stdio.stdio_client` (тот же SDK pattern, что и HTTP). Discriminated union `UpstreamConfig.transport` с backward-compat для Phase 1 `url: str`.
+
 ### OQ-hub-002 — Token-based profile auth
 
 `X-Profile-Id` — открытый header, любой MCP-клиент может прислать `developer-tools` и получить доступ к инструментам для pet-проектов. На localhost это допустимо, но если hub слушает на `0.0.0.0` (Phase 4, multi-host) — нет.
@@ -118,6 +120,8 @@ Kolya 2026-10-10: «я хочу менять profile без редактиров
 **Блокирует**: Phase 2 (когда появится hot-reload).
 
 **Когда решать**: при начале Phase 2.
+
+  - **RESOLVED 2026-10-10** → вариант (a): hot-reload invalid YAML → keep old config + log error. Спека [003-stdio-and-hot-reload](../specs/003-stdio-and-hot-reload/spec.md) FR-5.
 
 ### OQ-hub-008 — WebSocket transport
 
@@ -218,7 +222,7 @@ mcp.client.streamable_http.streamable_http_client использует `anyio.cr
 
 **Блокирует**: ничего (workaround работает).
 
-**Когда решать**: при начале Phase 2 — зарепортить upstream bug в modelcontextprotocol/python-sdk.
+**Когда решать**: при начале Phase 2 — зарепортить upstream bug в modelcontextprotocol/python-sdk. **Адресуется в [003-stdio-and-hot-reload Task 5.2](../specs/003-stdio-and-hot-reload/plan.md#task-52--submit-issue-в-modelcontextprotocolpython-sdk)**.
 
 ### OQ-hub-014 — pre-commit hook exit 250 после pyright
 
@@ -229,4 +233,4 @@ mcp.client.streamable_http.streamable_http_client использует `anyio.cr
 
 **Блокирует**: ничего (workaround работает, gates запускаются вручную).
 
-**Когда решать**: при начале Phase 2. Варианты: (a) убрать pre-commit hook и полагаться на CI / ручной прогон; (b) диагностировать signal (strace под hook); (c) заменить на pre-push hook вместо pre-commit.
+**Когда решать**: при начале Phase 2. **Адресуется в [003-stdio-and-hot-reload Task 4.1](../specs/003-stdio-and-hot-reload/plan.md#task-41--refactor-hook-с-explicit-step-handling)**. Варианты: (a) убрать pre-commit hook и полагаться на CI / ручной прогон; (b) диагностировать signal (strace под hook); (c) заменить на pre-push hook вместо pre-commit.
